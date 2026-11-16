@@ -4,6 +4,7 @@
   "description": "Tombola et concours de voitures pour l'événement Speedcore Auto",
   "main": "server.js",
   "scripts": { "start": "node server.js" },
+  "dependencies": { "firebase-admin": "^13.0.0" },
   "engines": { "node": ">=18" },
   "private": true
 }
