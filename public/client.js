@@ -275,11 +275,12 @@ async function pollTombola() {
 }
 
 /* ================= CONCOURS + CLASSEMENT ================= */
-let cars = [], voteLock = false, prevVotes = {};
+let cars = [], voteLock = false, prevVotes = {}, voteMode = 'once', votedCar = null;
 async function loadCars() {
   try {
     const d = await getJSON('/api/contest');
     cars = d.cars.map(c => ({ ...c, votes: c.votes || 0 }));
+    voteMode = d.voteMode || 'once'; votedCar = d.voted || null;
     renderCars(); renderRank();
   } catch {
     if (!$('#cars').children.length) $('#cars').innerHTML = '<div class="empty">Chargement impossible. La liste se rafraîchit toute seule.</div>';
@@ -306,21 +307,48 @@ function renderCars() {
     const c = cars.find(x => x.id === el.dataset.id); if (!c) return;
     el.querySelector('.rk').textContent = '#' + rk[c.id];
     el.querySelector('.vt b').textContent = c.votes;
+    const b = el.querySelector('.vote'), lab = b.querySelector('span');
+    if (voteMode === 'once' && votedCar) {
+      b.disabled = true; b.classList.toggle('done', c.id === votedCar);
+      lab.textContent = c.id === votedCar ? 'Ton vote' : 'Vote déjà fait';
+    } else if (!voteLock) { b.disabled = false; b.classList.remove('done'); lab.textContent = 'Voter'; }
   });
 }
 
+let toastT = 0;
+function toast(msg) {
+  let t = $('#toast');
+  if (!t) { t = document.createElement('div'); t.id = 'toast'; t.className = 'toast'; t.setAttribute('role', 'status'); document.body.appendChild(t); }
+  t.textContent = msg; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 3200);
+}
+
 $('#cars').addEventListener('click', async e => {
-  const btn = e.target.closest('.vote'); if (!btn || voteLock) return;
+  const btn = e.target.closest('.vote'); if (!btn || btn.disabled || voteLock) return;
   const card = btn.closest('.car'), c = cars.find(x => x.id === card.dataset.id); if (!c) return;
-  voteLock = true; sfx.vote(); buzz(25);
-  c.votes++; renderCars(); renderRank();
-  btn.classList.add('done'); btn.querySelector('span').textContent = 'Merci !';
-  const r = btn.getBoundingClientRect(), pl = document.createElement('span');
-  pl.className = 'plus'; pl.textContent = '+1'; pl.style.left = (r.left + r.width / 2 - 14) + 'px'; pl.style.top = (r.top - 10) + 'px'; pl.style.position = 'fixed';
-  document.body.appendChild(pl); setTimeout(() => pl.remove(), 1000);
-  if (!reduced) burst(r.left + r.width / 2, r.top, 22, -Math.PI / 2, 1.6, 11);
-  try { await fetch('/api/vote', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ carId: c.id }) }); } catch {}
-  setTimeout(() => { btn.classList.remove('done'); btn.querySelector('span').textContent = 'Voter'; voteLock = false; loadCars(); }, 1400);
+  voteLock = true; btn.disabled = true; btn.querySelector('span').textContent = 'Envoi';
+  let r;
+  try {
+    const res = await fetch('/api/vote', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ carId: c.id }) });
+    r = await res.json();
+  } catch { r = { ok: false, reason: 'net' }; }
+
+  if (r.ok) {
+    sfx.vote(); buzz(25);
+    c.votes++; if (voteMode === 'once') votedCar = c.id;
+    btn.classList.add('done'); btn.querySelector('span').textContent = 'Merci !';
+    const b = btn.getBoundingClientRect(), pl = document.createElement('span');
+    pl.className = 'plus'; pl.textContent = '+1'; pl.style.left = (b.left + b.width / 2 - 14) + 'px'; pl.style.top = (b.top - 10) + 'px'; pl.style.position = 'fixed';
+    document.body.appendChild(pl); setTimeout(() => pl.remove(), 1000);
+    if (!reduced) burst(b.left + b.width / 2, b.top, 22, -Math.PI / 2, 1.6, 11);
+    renderRank();
+  } else {
+    buzz([40, 50, 40]);
+    if (r.reason === 'already') { votedCar = r.voted || votedCar || c.id; toast('Tu as déjà voté. Merci !'); }
+    else if (r.reason === 'wait') toast('Patiente ' + Math.ceil((r.retryMs || 15000) / 1000) + ' s avant de revoter.');
+    else if (r.reason === 'ip') toast('Trop de votes depuis cette connexion.');
+    else toast('Vote non envoyé, réessaie.');
+  }
+  setTimeout(() => { voteLock = false; loadCars(); }, r.ok ? 1400 : 300);
 });
 
 /* ---------- classement ---------- */

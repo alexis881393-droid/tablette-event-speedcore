@@ -33,6 +33,8 @@ $('#t-concours').onclick = () => show('concours');
 
 // ---------- rendu ----------
 function render() {
+  const vm = state.settings?.voteMode || 'once';
+  document.querySelectorAll('input[name=voteMode]').forEach(r => { r.checked = r.value === vm; });
   const P = state.participants;
   $('#pCount').textContent = P.length;
   $('#pTotal').textContent = P.reduce((s, p) => s + p.tickets, 0);
@@ -138,3 +140,7 @@ $('#votesReset').onclick = async () => { if (confirm('Remettre tous les votes à
 
 boot();
 setInterval(() => { if (!$('#app').hidden && !document.activeElement.matches('input')) refresh().catch(() => {}); }, 5000);
+
+document.querySelectorAll('input[name=voteMode]').forEach(r => r.addEventListener('change', async () => {
+  try { await call('POST', '/api/admin/settings', { voteMode: r.value }); } catch (err) { alert(err.message); }
+}));

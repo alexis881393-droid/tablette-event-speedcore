@@ -250,3 +250,13 @@ body.shake { animation: shake .55s cubic-bezier(.3, .07, .19, .97); }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .rays { animation: none; }
 }
+
+.vote:disabled { cursor: default; }
+.vote:disabled:not(.done) { background: rgba(255, 255, 255, .06); color: var(--mute); box-shadow: none; }
+.toast {
+  position: fixed; z-index: 80; left: 50%; bottom: calc(var(--dock) + env(safe-area-inset-bottom) + 28px); transform: translate(-50%, 20px);
+  max-width: min(92vw, 420px); padding: 14px 20px; border-radius: 18px; text-align: center; font-weight: 600;
+  background: rgba(10, 13, 30, .94); border: 1px solid var(--gold); color: var(--ink); box-shadow: 0 0 30px var(--gold-glow);
+  opacity: 0; pointer-events: none; transition: opacity .25s, transform .25s;
+}
+.toast.on { opacity: 1; transform: translate(-50%, 0); }
