@@ -3,9 +3,9 @@ const { handle } = require('../lib/app');
 
 let store;
 try {
-  store = require('../lib/store-redis');
+  store = require('../lib/store-supabase');
 } catch (e) {
-  // Redis absent : la connexion reste possible, les autres routes renvoient l'erreur claire.
+  // Supabase non configuré : la connexion reste possible, les autres routes renvoient l'erreur claire.
   const fail = async () => { throw e; };
   store = new Proxy({}, { get: () => fail });
 }
