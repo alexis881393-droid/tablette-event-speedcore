@@ -105,11 +105,19 @@ function shrink(file) {
   });
 }
 let photoData = null;
-$('#cPhoto').addEventListener('change', async e => {
-  const f = e.target.files[0]; photoData = null; $('#cPreview').hidden = true;
+async function setPhoto(f) {
+  photoData = null; $('#cPreview').hidden = true;
   if (!f) return;
   try { photoData = await shrink(f); $('#cPreview').src = photoData; $('#cPreview').hidden = false; $('#cErr').textContent = ''; }
   catch (err) { $('#cErr').textContent = err.message; }
+}
+$('#cPhoto').addEventListener('change', e => setPhoto(e.target.files[0]));
+// Ctrl+V : colle une capture d'écran ou une image copiée (onglet Concours uniquement)
+document.addEventListener('paste', e => {
+  if ($('#concours').hidden) return;
+  const item = [...(e.clipboardData?.items || [])].find(i => i.type.startsWith('image/'));
+  if (!item) return;
+  e.preventDefault(); $('#cPhoto').value = ''; setPhoto(item.getAsFile());
 });
 $('#cForm').addEventListener('submit', async e => {
   e.preventDefault();
