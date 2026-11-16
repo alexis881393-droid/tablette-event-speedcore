@@ -132,7 +132,7 @@ main { max-width: 960px; margin: 0 auto; padding: 22px 16px 0; }
   background: var(--glass); border: 1px solid var(--line); font-weight: 600;
 }
 .chip em { font: 700 12px "Orbitron", sans-serif; font-style: normal; color: #1a1208; background: var(--gold-grad); padding: 6px 10px; border-radius: 999px; }
-.chip.win { border-color: var(--gold); box-shadow: 0 0 24px var(--gold-glow); background: rgba(60, 40, 18, .6); }
+.chip.champ { border-color: var(--gold); box-shadow: 0 0 24px var(--gold-glow); background: rgba(60, 40, 18, .6); }
 .empty { padding: 34px 18px; text-align: center; color: var(--mute); border: 1px dashed var(--line); border-radius: var(--r); }
 
 /* ---------- compte à rebours ---------- */

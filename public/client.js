@@ -158,7 +158,7 @@ function renderStats() {
 }
 function renderChips() {
   $('#chips').innerHTML = participants.length
-    ? participants.map(p => `<span class="chip${winner && winner.name === p.name && !busy ? ' win' : ''}">${esc(p.name)}<em>x${p.tickets}</em></span>`).join('')
+    ? participants.map(p => `<span class="chip${winner && winner.name === p.name && !busy ? ' champ' : ''}">${esc(p.name)}<em>x${p.tickets}</em></span>`).join('')
     : '<div class="empty">Les participants apparaissent ici dès qu\'ils sont inscrits.</div>';
 }
 
