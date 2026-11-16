@@ -18,7 +18,6 @@ $('#loginForm').addEventListener('submit', async e => {
   try { await call('POST', '/api/admin/login', { pin: $('#pin').value }); $('#pin').value = ''; $('#loginErr').textContent = ''; await boot(); }
   catch (err) { $('#loginErr').textContent = err.message; }
 });
-$('#logout').addEventListener('click', async () => { await call('POST', '/api/admin/logout').catch(() => {}); showLogin(); });
 
 async function boot() {
   try { await refresh(); $('#loginView').hidden = true; $('#app').hidden = false; } catch { showLogin(); }
