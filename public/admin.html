@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Speedcore Auto - Espace entreprise</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<div id="loginView" class="login" hidden>
+  <img src="/logo.png" alt="Speedcore Auto">
+  <form id="loginForm">
+    <label class="f"><span>Code entreprise</span><input type="password" id="pin" autocomplete="current-password" required></label>
+    <div class="err" id="loginErr" role="alert"></div>
+    <button class="btn" type="submit">Entrer</button>
+  </form>
+</div>
+
+<div id="app" hidden>
+  <header class="top">
+    <img src="/logo.png" alt="Speedcore Auto">
+    <nav class="tabs" role="tablist">
+      <button class="tab" role="tab" id="t-tombola" aria-selected="true">Tombola</button>
+      <button class="tab" role="tab" id="t-concours" aria-selected="false">Concours</button>
+    </nav>
+    <button class="btn small ghost" id="logout">Quitter</button>
+  </header>
+
+  <main>
+    <!-- ======== TOMBOLA ======== -->
+    <section id="tombola">
+      <h1>Tombola <span class="bronze">entreprise</span></h1>
+      <p class="lead">Les numéros de téléphone sont visibles uniquement ici.</p>
+
+      <div id="winbox" class="winbox" hidden></div>
+
+      <div class="grid2">
+        <div class="card">
+          <h2 id="pFormTitle">Nouveau participant</h2>
+          <form id="pForm">
+            <label class="f"><span>Prénom</span><input type="text" id="pFirst" required autocomplete="off"></label>
+            <label class="f"><span>Nom</span><input type="text" id="pLast" required autocomplete="off"></label>
+            <label class="f"><span>Téléphone</span><input type="tel" id="pPhone" autocomplete="off"></label>
+            <label class="f"><span>Nombre de participations</span><input type="number" id="pTickets" min="1" max="999" value="1" required></label>
+            <div class="err" id="pErr" role="alert"></div>
+            <button class="btn gold" type="submit" id="pSubmit">Ajouter</button>
+            <button class="btn ghost" type="button" id="pCancel" hidden>Annuler</button>
+          </form>
+        </div>
+
+        <div>
+          <div class="bar">
+            <div class="grow stat"><b id="pCount">0</b> participants · <b id="pTotal">0</b> tickets</div>
+            <button class="btn gold" id="drawBtn">Lancer le tirage</button>
+            <button class="btn ghost small" id="drawReset">Effacer le gagnant</button>
+          </div>
+          <div class="tablewrap card">
+            <table>
+              <thead><tr><th>Participant</th><th>Téléphone</th><th>Tickets</th><th></th></tr></thead>
+              <tbody id="pRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======== CONCOURS ======== -->
+    <section id="concours" hidden>
+      <h1>Concours <span class="bronze">entreprise</span></h1>
+      <p class="lead">Les votes sont visibles uniquement ici.</p>
+
+      <div class="grid2">
+        <div class="card">
+          <h2>Nouvelle voiture</h2>
+          <form id="cForm">
+            <img class="preview" id="cPreview" alt="" hidden>
+            <label class="f"><span>Photo de la voiture</span><input type="file" id="cPhoto" accept="image/*" required></label>
+            <label class="f"><span>Nom du propriétaire</span><input type="text" id="cOwner" required autocomplete="off"></label>
+            <label class="f"><span>Modèle (facultatif)</span><input type="text" id="cModel" autocomplete="off"></label>
+            <div class="err" id="cErr" role="alert"></div>
+            <button class="btn gold" type="submit" id="cSubmit">Ajouter au concours</button>
+          </form>
+        </div>
+
+        <div>
+          <div class="bar">
+            <div class="grow stat"><b id="cCount">0</b> voitures · <b id="cVotes">0</b> votes</div>
+            <button class="btn ghost small" id="votesReset">Remettre les votes à zéro</button>
+          </div>
+          <div class="tablewrap card">
+            <table>
+              <thead><tr><th>Photo</th><th>Propriétaire</th><th>Votes</th><th></th></tr></thead>
+              <tbody id="cRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="/admin.js"></script>
+</body>
+</html>

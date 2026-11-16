@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Speedcore Auto - Événement</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="top">
+  <img src="/logo.png" alt="Speedcore Auto">
+  <nav class="tabs" role="tablist">
+    <button class="tab" role="tab" id="t-tombola" aria-selected="true" aria-controls="tombola">Tombola</button>
+    <button class="tab" role="tab" id="t-concours" aria-selected="false" aria-controls="concours">Concours</button>
+  </nav>
+</header>
+
+<main>
+  <section id="tombola" role="tabpanel" aria-labelledby="t-tombola">
+    <h1>Tirage de la <span class="bronze">tombola</span></h1>
+    <p class="lead">Chaque participation compte : plus on a de tickets, plus on a de chances d'être tiré.</p>
+
+    <div class="stage" aria-live="polite">
+      <div class="label" id="stageLabel">En attente du tirage</div>
+      <div class="roll display" id="roll">?</div>
+      <div class="stat"><b id="count">0</b> participants · <b id="tickets">0</b> tickets</div>
+    </div>
+
+    <h2>Participants</h2>
+    <div class="chips" id="chips"></div>
+  </section>
+
+  <section id="concours" role="tabpanel" aria-labelledby="t-concours" hidden>
+    <h1>Concours <span class="bronze">de voitures</span></h1>
+    <p class="lead">Touche la voiture que tu préfères pour voter.</p>
+    <div class="cars" id="cars"></div>
+  </section>
+</main>
+
+<script src="/client.js"></script>
+</body>
+</html>

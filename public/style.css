@@ -1,0 +1,166 @@
+:root {
+  --black: #050608;
+  --panel: #0d0f15;
+  --panel-2: #141824;
+  --line: #232a3d;
+  --blue: #4c6bc4;
+  --blue-hi: #7a95ec;
+  --bronze-hi: #e0c39a;
+  --bronze: #a98a62;
+  --bronze-lo: #7a5c3a;
+  --text: #eef0f6;
+  --muted: #8f97ad;
+  --danger: #e0645c;
+  --ok: #5cc98a;
+  --bronze-grad: linear-gradient(180deg, var(--bronze-hi) 0%, var(--bronze) 50%, var(--bronze-lo) 100%);
+  --slant: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+}
+
+* { box-sizing: border-box; margin: 0; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--black);
+  color: var(--text);
+  font: 500 17px/1.5 "Chakra Petch", system-ui, sans-serif;
+  min-height: 100vh;
+  background-image:
+    repeating-linear-gradient(115deg, transparent 0 46px, rgba(76,107,196,.045) 46px 48px);
+  -webkit-tap-highlight-color: transparent;
+}
+h1, h2, h3, .display { font-family: "Orbitron", "Chakra Petch", sans-serif; letter-spacing: .02em; }
+.bronze { background: var(--bronze-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+/* ---------- header ---------- */
+.top {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 14px clamp(16px, 4vw, 40px);
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, #0a0c12, var(--black));
+  position: sticky; top: 0; z-index: 10;
+}
+.top img { height: clamp(40px, 7vw, 62px); display: block; }
+
+/* ---------- tabs : parallélogrammes du logo ---------- */
+.tabs { display: flex; gap: 6px; }
+.tab {
+  font: 700 15px/1 "Orbitron", sans-serif; letter-spacing: .06em;
+  color: var(--muted); background: var(--panel-2); border: 0; cursor: pointer;
+  padding: 16px 28px; clip-path: var(--slant); min-height: 52px;
+  transition: color .15s, background .15s;
+}
+.tab:hover { color: var(--text); }
+.tab[aria-selected="true"] { background: var(--blue); color: #fff; }
+.tab:focus-visible, .btn:focus-visible, input:focus-visible, .car:focus-visible { outline: 3px solid var(--bronze-hi); outline-offset: 2px; }
+
+main { padding: clamp(16px, 4vw, 40px); max-width: 1280px; margin: 0 auto; }
+section[hidden] { display: none; }
+
+h1 { font-size: clamp(28px, 5vw, 52px); line-height: 1.05; margin-bottom: 8px; text-transform: uppercase; }
+.lead { color: var(--muted); max-width: 56ch; margin-bottom: 28px; }
+
+/* ---------- boutons ---------- */
+.btn {
+  font: 700 16px/1 "Orbitron", sans-serif; letter-spacing: .05em; text-transform: uppercase;
+  border: 0; cursor: pointer; color: #fff; background: var(--blue);
+  padding: 18px 34px; min-height: 56px; clip-path: var(--slant);
+  transition: filter .15s, transform .1s;
+}
+.btn:hover { filter: brightness(1.15); }
+.btn:active { transform: translateY(1px); }
+.btn.gold { background: var(--bronze-grad); color: #1a1208; }
+.btn.ghost { background: var(--panel-2); color: var(--text); }
+.btn.danger { background: #3a1a1a; color: #ff9b94; }
+.btn.small { padding: 10px 18px; min-height: 40px; font-size: 13px; }
+.btn[disabled] { opacity: .45; cursor: not-allowed; }
+
+/* ---------- tombola client ---------- */
+.stage {
+  position: relative; overflow: hidden; text-align: center;
+  background: linear-gradient(160deg, var(--panel-2), var(--panel));
+  border: 1px solid var(--line); padding: clamp(28px, 6vw, 64px) 20px; margin-bottom: 28px;
+}
+.stage::before, .stage::after {
+  content: ""; position: absolute; left: 0; right: 0; height: 10px; background: var(--blue);
+}
+.stage::before { top: 0; clip-path: polygon(0 0, 100% 0, 97% 100%, 3% 100%); }
+.stage::after { bottom: 0; clip-path: polygon(3% 0, 97% 0, 100% 100%, 0 100%); }
+.stage .label { color: var(--muted); font-size: 15px; }
+.roll {
+  font: 900 clamp(34px, 8vw, 96px)/1.1 "Orbitron", sans-serif; min-height: 1.2em; margin: 14px 0 6px;
+  text-transform: uppercase; overflow-wrap: anywhere;
+}
+.roll.spin { color: var(--blue-hi); }
+.roll.win { animation: pop .7s cubic-bezier(.2, 1.6, .4, 1); }
+@keyframes pop { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.stat { color: var(--muted); }
+.stat b { color: var(--bronze-hi); font-family: "Orbitron", sans-serif; }
+
+.chips { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.chip {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--blue);
+  padding: 14px 16px;
+}
+.chip.winner { border-left-color: var(--bronze-hi); background: #1b1710; box-shadow: 0 0 0 1px var(--bronze); }
+.chip .n { font-family: "Orbitron", sans-serif; font-size: 13px; color: var(--bronze-hi); white-space: nowrap; }
+h2 { font-size: 20px; margin: 8px 0 14px; text-transform: uppercase; }
+
+/* ---------- concours client ---------- */
+.cars { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: 18px; }
+.car {
+  position: relative; background: var(--panel); border: 1px solid var(--line); cursor: pointer;
+  text-align: left; color: inherit; font: inherit; padding: 0; overflow: hidden;
+  transition: border-color .15s, transform .15s;
+}
+.car:hover { border-color: var(--blue); }
+.car img { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; background: #000; }
+.car .info { padding: 14px 16px 16px; display: flex; justify-content: space-between; align-items: end; gap: 12px; }
+.car .owner { font: 700 18px/1.2 "Orbitron", sans-serif; text-transform: uppercase; }
+.car .model { color: var(--muted); font-size: 15px; }
+.car .vote {
+  background: var(--blue); color: #fff; font: 700 13px/1 "Orbitron", sans-serif; letter-spacing: .06em;
+  padding: 12px 16px; clip-path: var(--slant); white-space: nowrap; text-transform: uppercase;
+}
+.car.voted { border-color: var(--bronze-hi); }
+.car.voted .vote { background: var(--bronze-grad); color: #1a1208; }
+.car.voted::after {
+  content: "Merci pour ton vote !"; position: absolute; inset: 0 0 auto 0; padding: 12px;
+  background: rgba(5,6,8,.82); text-align: center; font: 700 15px "Orbitron", sans-serif; color: var(--bronze-hi);
+  animation: fade 1.8s forwards;
+}
+@keyframes fade { 0%, 70% { opacity: 1; } 100% { opacity: 0; } }
+
+.empty { border: 1px dashed var(--line); padding: 40px 20px; text-align: center; color: var(--muted); }
+
+/* ---------- admin ---------- */
+.login { max-width: 420px; margin: 12vh auto; text-align: center; }
+.login img { width: 100%; margin-bottom: 28px; }
+.grid2 { display: grid; grid-template-columns: minmax(280px, 380px) 1fr; gap: 28px; align-items: start; }
+@media (max-width: 860px) { .grid2 { grid-template-columns: 1fr; } }
+.card { background: var(--panel); border: 1px solid var(--line); border-top: 4px solid var(--blue); padding: 20px; }
+form .f { display: block; margin-bottom: 14px; }
+form .f span { display: block; color: var(--muted); font-size: 14px; margin-bottom: 4px; }
+input[type=text], input[type=tel], input[type=number], input[type=password] {
+  width: 100%; background: var(--black); border: 1px solid var(--line); color: var(--text);
+  font: inherit; padding: 14px; min-height: 52px;
+}
+input:focus { border-color: var(--blue); }
+input[type=file] { color: var(--muted); width: 100%; }
+.preview { width: 100%; aspect-ratio: 4/3; object-fit: cover; margin-bottom: 14px; border: 1px solid var(--line); }
+.err { color: var(--danger); min-height: 1.4em; margin: 8px 0; }
+
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 12px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+th { color: var(--muted); font: 600 13px "Orbitron", sans-serif; }
+td.act { text-align: right; white-space: nowrap; }
+td input { min-height: 40px; padding: 8px; }
+.tablewrap { overflow-x: auto; }
+.thumb { width: 84px; aspect-ratio: 4/3; object-fit: cover; display: block; }
+.votes { font: 900 24px "Orbitron", sans-serif; color: var(--bronze-hi); }
+.bar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; align-items: center; }
+.bar .grow { flex: 1; }
+.winbox { background: #1b1710; border: 1px solid var(--bronze); padding: 16px 20px; margin-bottom: 18px; }
+.winbox b { font: 700 22px "Orbitron", sans-serif; }
+
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+@media (max-width: 560px) { .top { flex-wrap: wrap; justify-content: center; } .tab { padding: 14px 18px; } }
