@@ -5,6 +5,7 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 // ---------- onglets ----------
 const tabs = { tombola: $('#t-tombola'), concours: $('#t-concours') };
 function show(name) {
+  if (name === 'concours' && typeof loadCars === 'function') loadCars();
   for (const [k, btn] of Object.entries(tabs)) {
     btn.setAttribute('aria-selected', k === name);
     $('#' + k).hidden = k !== name;
@@ -67,7 +68,9 @@ async function pollTombola() {
 let voteLock = false;
 async function loadCars() {
   try {
-    const { cars } = await (await fetch('/api/contest')).json();
+    const r = await fetch('/api/contest?t=' + Date.now(), { cache: 'no-store' });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const { cars } = await r.json();
     const box = $('#cars');
     const sig = JSON.stringify(cars);
     if (box.dataset.sig === sig) return;
@@ -77,7 +80,9 @@ async function loadCars() {
         <img src="${esc(c.photo)}" alt="Voiture de ${esc(c.owner)}" loading="lazy">
         <div class="info"><div><div class="owner">${esc(c.owner)}</div>${c.model ? `<div class="model">${esc(c.model)}</div>` : ''}</div><span class="vote">Voter</span></div>
       </button>`).join('') : '<div class="empty">Le concours démarre bientôt : les voitures arrivent.</div>';
-  } catch {}
+  } catch {
+    if (!$('#cars').children.length) $('#cars').innerHTML = '<div class="empty">Chargement impossible. Vérifie la connexion, la liste se rafraîchit toute seule.</div>';
+  }
 }
 
 $('#cars').addEventListener('click', async e => {
@@ -92,4 +97,4 @@ $('#cars').addEventListener('click', async e => {
 
 pollTombola(); loadCars();
 setInterval(pollTombola, 2500);
-setInterval(loadCars, 8000);
+setInterval(loadCars, 5000);
