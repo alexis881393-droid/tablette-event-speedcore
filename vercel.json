@@ -2,5 +2,11 @@
   "rewrites": [
     { "source": "/admin", "destination": "/admin.html" },
     { "source": "/api/:path*", "destination": "/api/index?p=:path*" }
+  ],
+  "headers": [
+    {
+      "source": "/((?!api/).*)",
+      "headers": [{ "key": "Cache-Control", "value": "no-store, must-revalidate" }]
+    }
   ]
 }
