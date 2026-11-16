@@ -2,44 +2,91 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#04050b">
 <title>Speedcore Auto - Événement</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css?v=1794836671">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+<link rel="stylesheet" href="/app.css?v=2">
 </head>
 <body>
-<header class="top">
-  <img src="/logo.png" alt="Speedcore Auto">
-  <nav class="tabs" role="tablist">
-    <button class="tab" role="tab" id="t-tombola" aria-selected="true" aria-controls="tombola">Tombola</button>
-    <button class="tab" role="tab" id="t-concours" aria-selected="false" aria-controls="concours">Concours</button>
-  </nav>
+
+<div class="bg" aria-hidden="true"><i class="orb o1"></i><i class="orb o2"></i><div class="lines"></div></div>
+<div class="tension" id="tension" aria-hidden="true"></div>
+
+<header class="bar">
+  <img class="logo" src="/logo.png" alt="Speedcore Auto">
+  <div class="bar-r">
+    <span class="live"><i></i>En direct</span>
+    <button class="icon-btn" id="snd" aria-label="Activer ou couper le son" aria-pressed="true"><i class="ph ph-speaker-high"></i></button>
+  </div>
 </header>
 
 <main>
-  <section id="tombola" role="tabpanel" aria-labelledby="t-tombola">
-    <h1>Tirage de la <span class="bronze">tombola</span></h1>
-    <p class="lead">Chaque participation compte : plus on a de tickets, plus on a de chances d'être tiré.</p>
+  <!-- ================= TOMBOLA ================= -->
+  <section id="tombola" class="view">
+    <h1 class="title">Tirage <span class="gold">au sort</span></h1>
+    <p class="sub">Chaque ticket est une chance de gagner.</p>
 
-    <div class="stage" aria-live="polite">
-      <div class="label" id="stageLabel">En attente du tirage</div>
-      <div class="roll display" id="roll">?</div>
-      <div class="stat"><b id="count">0</b> participants · <b id="tickets">0</b> tickets</div>
+    <div class="draw" id="draw">
+      <div class="reel-wrap" id="reelWrap">
+        <div class="reel" id="reel"></div>
+        <div class="reel-band" aria-hidden="true"></div>
+      </div>
+      <p class="status" id="status" aria-live="polite">Chargement du tirage</p>
+      <div class="stats">
+        <div class="stat"><b id="count">0</b><span>participants</span></div>
+        <div class="stat"><b id="tickets">0</b><span>tickets</span></div>
+      </div>
     </div>
 
-    <h2>Participants</h2>
+    <h2 class="h2">Ils jouent ce soir</h2>
     <div class="chips" id="chips"></div>
   </section>
 
-  <section id="concours" role="tabpanel" aria-labelledby="t-concours" hidden>
-    <h1>Concours <span class="bronze">de voitures</span></h1>
-    <p class="lead">Touche la voiture que tu préfères pour voter.</p>
+  <!-- ================= CONCOURS ================= -->
+  <section id="concours" class="view" hidden>
+    <h1 class="title">Vote pour ta <span class="gold">préférée</span></h1>
+    <p class="sub">Un tap sur la voiture que tu préfères. Le classement bouge en direct.</p>
     <div class="cars" id="cars"></div>
+  </section>
+
+  <!-- ================= CLASSEMENT ================= -->
+  <section id="classement" class="view" hidden>
+    <h1 class="title">Classement <span class="gold">en direct</span></h1>
+    <p class="sub"><b id="totalVotes">0</b> votes comptés</p>
+    <div class="podium" id="podium"></div>
+    <div class="rows" id="rows"></div>
   </section>
 </main>
 
-<script src="/client.js?v=1794836671"></script>
+<nav class="dock" aria-label="Navigation">
+  <button data-tab="tombola" aria-current="page"><i class="ph ph-ticket"></i><span>Tombola</span></button>
+  <button data-tab="concours"><i class="ph ph-car-profile"></i><span>Concours</span></button>
+  <button data-tab="classement"><i class="ph ph-trophy"></i><span>Classement</span></button>
+</nav>
+
+<!-- compte à rebours -->
+<div class="cd" id="cd" hidden aria-live="assertive"><div class="cd-n" id="cdN">3</div></div>
+
+<!-- gagnant -->
+<div class="win" id="win" hidden role="dialog" aria-modal="true" aria-labelledby="wName">
+  <div class="rays" aria-hidden="true"></div>
+  <div class="win-in">
+    <i class="ph-fill ph-crown-simple win-crown"></i>
+    <div class="win-lbl">Le gagnant est</div>
+    <div class="win-name" id="wName"></div>
+    <div class="win-meta" id="wMeta"></div>
+    <button class="btn" id="wClose">Continuer</button>
+  </div>
+</div>
+
+<div class="flash" id="flash" aria-hidden="true"></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<script src="/client.js?v=2"></script>
 </body>
 </html>
