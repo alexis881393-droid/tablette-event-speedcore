@@ -4,6 +4,7 @@ const { handle } = require('../lib/app');
 let store;
 try {
   store = require('../lib/store-firebase');
+  store.cache = require('../lib/cache')(store);
 } catch (e) {
   // Firebase non configuré : la connexion reste possible, les autres routes renvoient l'erreur claire.
   const fail = async () => { throw e; };

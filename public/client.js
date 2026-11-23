@@ -394,8 +394,8 @@ let tickN = 0;
 setInterval(() => {
   if (document.hidden) return; tickN++;
   pollTombola();
-  if ((tab !== 'tombola' && tickN % 2 === 0) || tickN % 6 === 0) loadCars();
-}, 2000);
+  if (tab !== 'tombola' || tickN % 5 === 0) loadCars();
+}, 4000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) { pollTombola(); loadCars(); } });
 
 show(location.hash.slice(1) || mem.get('sc_tab', 'tombola'), true);

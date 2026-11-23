@@ -139,7 +139,7 @@ $('#cRows').addEventListener('click', async e => {
 $('#votesReset').onclick = async () => { if (confirm('Remettre tous les votes à zéro ?')) { await call('POST', '/api/admin/votes/reset'); refresh(); } };
 
 boot();
-setInterval(() => { if (!$('#app').hidden && !document.activeElement.matches('input')) refresh().catch(() => {}); }, 5000);
+setInterval(() => { if (!$('#app').hidden && !document.activeElement.matches('input')) refresh().catch(() => {}); }, 12000);
 
 document.querySelectorAll('input[name=voteMode]').forEach(r => r.addEventListener('change', async () => {
   try { await call('POST', '/api/admin/settings', { voteMode: r.value }); } catch (err) { alert(err.message); }
